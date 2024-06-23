@@ -25,6 +25,13 @@ type GeneralDB struct {
 	LogZap       bool   `mapstructure:"log-zap" json:"log-zap" yaml:"log-zap"`                      // 是否通过zap写入日志文件
 }
 
+type SpecializedDB struct {
+	Type      string `mapstructure:"type" json:"type" yaml:"type"`
+	AliasName string `mapstructure:"alias-name" json:"alias-name" yaml:"alias-name"`
+	GeneralDB `yaml:",inline" mapstructure:",squash"`
+	Disable   bool `mapstructure:"disable" json:"disable" yaml:"disable"`
+}
+
 func (c GeneralDB) LogLevel() logger.LogLevel {
 	switch strings.ToLower(c.LogMode) {
 	case "silent", "Silent":
