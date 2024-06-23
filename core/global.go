@@ -1,4 +1,4 @@
-package datasource
+package core
 
 import (
 	"github.com/redis/go-redis/v9"
@@ -26,15 +26,15 @@ var (
 	lock               sync.RWMutex
 )
 
-// GetGlobalDBByDBName 通过名称获取db list中的db
-func GetGlobalDBByDBName(dbname string) *gorm.DB {
+// GetGlobalDbByDBName 通过名称获取db list中的db
+func GetGlobalDbByDBName(dbname string) *gorm.DB {
 	lock.RLock()
 	defer lock.RUnlock()
 	return DbList[dbname]
 }
 
-// MustGetGlobalDBByDBName 通过名称获取db 如果不存在则panic
-func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
+// MustGetGlobalDbByDBName 通过名称获取db 如果不存在则panic
+func MustGetGlobalDbByDBName(dbname string) *gorm.DB {
 	lock.RLock()
 	defer lock.RUnlock()
 	db, ok := DbList[dbname]
