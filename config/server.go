@@ -18,7 +18,7 @@ type Server struct {
 	// gorm
 	Mysql  datasource.Mysql           `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	Pgsql  datasource.Pgsql           `mapstructure:"pgsql" json:"pgsql" yaml:"pgsql"`
-	DBList []datasource.SpecializedDB `mapstructure:"db-list" json:"db-list" yaml:"db-list"`
+	DbList []datasource.SpecializedDB `mapstructure:"db-list" json:"db-list" yaml:"db-list"`
 	// oss
 	Local     oss.Local     `mapstructure:"local" json:"local" yaml:"local"`
 	AliyunOss oss.AliyunOss `mapstructure:"aliyun-oss" json:"aliyun-oss" yaml:"aliyun-oss"`
