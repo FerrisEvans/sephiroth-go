@@ -8,7 +8,14 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
-	"sephiroth-go/constant"
+)
+
+const (
+	Env               = "default"
+	ConfigDefaultFile = "config.yaml"
+	ConfigTestFile    = "config.test.yaml"
+	ConfigDebugFile   = "config.debug.yaml"
+	ConfigReleaseFile = "config.release.yaml"
 )
 
 // Viper //
@@ -20,21 +27,21 @@ func Viper(path ...string) *viper.Viper {
 		flag.StringVar(&config, "c", "", "choose config file.")
 		flag.Parse()
 		if config == "" { // 判断命令行参数是否为空
-			if configEnv := os.Getenv(constant.ConfigEnv); configEnv == "" { // 判断 constant.ConfigEnv 常量存储的环境变量是否为空
+			if configEnv := os.Getenv(Env); configEnv == "" { // 判断 constant.ConfigEnv 常量存储的环境变量是否为空
 				switch gin.Mode() {
 				case gin.DebugMode:
-					config = constant.ConfigDefaultFile
-					fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", gin.Mode(), constant.ConfigDefaultFile)
+					config = ConfigDebugFile
+					fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", gin.Mode(), ConfigDebugFile)
 				case gin.ReleaseMode:
-					config = constant.ConfigReleaseFile
-					fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", gin.Mode(), constant.ConfigReleaseFile)
+					config = ConfigReleaseFile
+					fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", gin.Mode(), ConfigReleaseFile)
 				case gin.TestMode:
-					config = constant.ConfigTestFile
-					fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", gin.Mode(), constant.ConfigTestFile)
+					config = ConfigTestFile
+					fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", gin.Mode(), ConfigTestFile)
 				}
 			} else { // constant.ConfigEnv 常量存储的环境变量不为空 将值赋值于config
 				config = configEnv
-				fmt.Printf("您正在使用%s环境变量,config的路径为%s\n", constant.ConfigEnv, config)
+				fmt.Printf("您正在使用%s环境变量,config的路径为%s\n", Env, config)
 			}
 		} else { // 命令行参数不为空 将值赋值于config
 			fmt.Printf("您正在使用命令行的-c参数传递的值,config的路径为%s\n", config)

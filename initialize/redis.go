@@ -1,10 +1,11 @@
-package init
+package initialize
 
 import (
 	"context"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"sephiroth-go/core"
+	"sephiroth-go/core/log"
 )
 
 func Redis() {
@@ -26,10 +27,10 @@ func Redis() {
 	}
 	pong, err := client.Ping(context.Background()).Result()
 	if err != nil {
-		core.Log.Error("redis connect ping failed, err:", zap.Error(err))
+		log.Log.Error("redis connect ping failed, err:", zap.Error(err))
 		panic(err)
 	} else {
-		core.Log.Info("redis connect ping response:", zap.String("pong", pong))
+		log.Log.Info("redis connect ping response:", zap.String("pong", pong))
 		core.RedisClient = client
 	}
 }

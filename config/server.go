@@ -2,7 +2,7 @@ package config
 
 import (
 	"sephiroth-go/config/datasource"
-	"sephiroth-go/config/oss"
+	"sephiroth-go/config/storage"
 )
 
 type Server struct {
@@ -19,10 +19,10 @@ type Server struct {
 	Mysql  datasource.Mysql           `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	Pgsql  datasource.Pgsql           `mapstructure:"pgsql" json:"pgsql" yaml:"pgsql"`
 	DbList []datasource.SpecializedDB `mapstructure:"db-list" json:"db-list" yaml:"db-list"`
-	// oss
-	Local     oss.Local     `mapstructure:"local" json:"local" yaml:"local"`
-	AliyunOss oss.AliyunOss `mapstructure:"aliyun-oss" json:"aliyun-oss" yaml:"aliyun-oss"`
-	Excel     Excel         `mapstructure:"excel" json:"excel" yaml:"excel"`
-	DiskList  []DiskList    `mapstructure:"disk-list" json:"disk-list" yaml:"disk-list"`
-	Cors      Cors          `mapstructure:"cors" json:"cors" yaml:"cors"`
+	// storage
+	Local     storage.Local     `mapstructure:"local" json:"local" yaml:"local"`
+	AliyunOss storage.AliyunOss `mapstructure:"aliyun-storage" json:"aliyun-storage" yaml:"aliyun-storage"`
+	Excel     Excel             `mapstructure:"excel" json:"excel" yaml:"excel"`
+	DiskList  []DiskList        `mapstructure:"disk-list" json:"disk-list" yaml:"disk-list"`
+	Cors      Cors              `mapstructure:"cors" json:"cors" yaml:"cors"`
 }

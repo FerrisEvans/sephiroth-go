@@ -1,4 +1,4 @@
-package oss
+package storage
 
 type Local struct {
 	Path      string `mapstructure:"path" json:"path" yaml:"path"`                   // 本地文件访问路径

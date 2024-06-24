@@ -1,10 +1,10 @@
-package util
+package auth
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid"
 	"net"
-	"sephiroth-go/core"
+	"sephiroth-go/core/log"
 	"sephiroth-go/model/req"
 )
 
@@ -49,7 +49,7 @@ func GetClaims(c *gin.Context) (*req.CustomClaims, error) {
 	j := NewJWT()
 	claims, err := j.ParseToken(token)
 	if err != nil {
-		core.Log.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构")
+		log.Log.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构")
 	}
 	return claims, err
 }

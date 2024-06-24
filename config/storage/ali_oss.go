@@ -1,4 +1,4 @@
-package oss
+package storage
 
 type AliyunOss struct {
 	Endpoint        string `mapstructure:"endpoint" json:"endpoint" yaml:"endpoint"`

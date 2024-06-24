@@ -4,6 +4,7 @@ import (
 	"context"
 	"go.uber.org/zap"
 	"sephiroth-go/core"
+	"sephiroth-go/core/log"
 	"sephiroth-go/model/sys"
 	"sephiroth-go/util"
 )
@@ -67,7 +68,7 @@ func LoadAll() {
 	var data []string
 	err := core.Db.Model(&sys.JwtBlacklist{}).Select("jwt").Find(&data).Error
 	if err != nil {
-		core.Log.Error("加载数据库jwt黑名单失败!", zap.Error(err))
+		log.Log.Error("加载数据库jwt黑名单失败!", zap.Error(err))
 		return
 	}
 	for i := 0; i < len(data); i++ {

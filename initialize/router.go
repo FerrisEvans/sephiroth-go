@@ -1,10 +1,11 @@
-package init
+package initialize
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"sephiroth-go/core"
+	"sephiroth-go/core/log"
 	"sephiroth-go/middleware"
 )
 
@@ -37,7 +38,7 @@ func Routers() *gin.Engine {
 	// 跨域，如需跨域可以打开下面的注释
 	// Router.Use(middleware.Cors()) // 直接放行全部跨域请求
 	// Router.Use(middleware.CorsByRules()) // 按照配置的规则放行跨域请求
-	//core.Log.Info("use middleware cors")
+	//log.Log.Info("use middleware cors")
 
 	// 方便统一添加路由组前缀 多服务器上线使用
 
@@ -88,6 +89,6 @@ func Routers() *gin.Engine {
 	// 注册业务路由
 	//initBizRouter(PrivateGroup, PublicGroup)
 
-	core.Log.Info("router register success")
+	log.Log.Info("router register success")
 	return Router
 }

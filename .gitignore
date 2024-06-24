@@ -35,3 +35,9 @@ go.work
 *.sln
 *.sw?
 *.iml
+
+config.debug.yaml
+config.dev.yaml
+config.test.yaml
+
+/sys-log

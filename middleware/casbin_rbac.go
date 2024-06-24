@@ -3,9 +3,9 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"sephiroth-go/core"
+	"sephiroth-go/core/auth"
 	"sephiroth-go/model/resp"
 	"sephiroth-go/service"
-	"sephiroth-go/util"
 	"strconv"
 	"strings"
 )
@@ -15,7 +15,7 @@ var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 // CasbinHandler 拦截器
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		waitUse, _ := util.GetClaims(c)
+		waitUse, _ := auth.GetClaims(c)
 		//获取请求的PATH
 		path := c.Request.URL.Path
 		obj := strings.TrimPrefix(path, core.Config.System.RouterPrefix)

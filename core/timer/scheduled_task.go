@@ -1,4 +1,4 @@
-package util
+package timer
 
 import (
 	"github.com/robfig/cron/v3"

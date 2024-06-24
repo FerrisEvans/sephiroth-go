@@ -1,15 +1,16 @@
-package init
+package initialize
 
 import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"log"
+	logs "log"
 	"os"
+	"sephiroth-go/config"
 	"sephiroth-go/config/datasource"
-	"sephiroth-go/constant"
 	"sephiroth-go/core"
+	"sephiroth-go/core/log"
 	"time"
 )
 
@@ -19,9 +20,9 @@ type _gorm struct{}
 
 func Database() *gorm.DB {
 	switch core.Config.System.DbType {
-	case constant.MySql:
+	case config.MySql:
 		return GormMysql()
-	case constant.Postgres:
+	case config.Postgres:
 		return GormPgSql()
 	default:
 		return GormMysql()
@@ -34,11 +35,11 @@ func RegisterTables() {
 	// todo
 	)
 	if err != nil {
-		core.Log.Error("register table failed", zap.Error(err))
+		log.Log.Error("register table failed", zap.Error(err))
 		os.Exit(0)
 	}
 
-	core.Log.Info("register table success")
+	log.Log.Info("register table success")
 }
 
 // Config gorm 自定义配置
@@ -53,7 +54,7 @@ func (g *_gorm) Config(prefix string, singular bool) *gorm.Config {
 		general = core.Config.Mysql.GeneralDB
 	}
 	return &gorm.Config{
-		Logger: logger.New(NewWriter(general, log.New(os.Stdout, "\r\n", log.LstdFlags)), logger.Config{
+		Logger: logger.New(NewWriter(general, logs.New(os.Stdout, "\r\n", logs.LstdFlags)), logger.Config{
 			SlowThreshold: 200 * time.Millisecond,
 			LogLevel:      general.LogLevel(),
 			Colorful:      true,

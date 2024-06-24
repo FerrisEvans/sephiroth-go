@@ -1,23 +1,17 @@
-package util
+package auth
 
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
 	"sephiroth-go/core"
 	"sephiroth-go/model/req"
+	"sephiroth-go/util"
 	"time"
 )
 
 type Jwt struct {
 	SigningKey []byte
 }
-
-var (
-	TokenExpired     = errors.New("token is expired")
-	TokenNotValidYet = errors.New("token not active yet")
-	TokenMalformed   = errors.New("that's not even a token")
-	TokenInvalid     = errors.New("couldn't handle this token")
-)
 
 func NewJWT() *Jwt {
 	return &Jwt{
@@ -26,8 +20,8 @@ func NewJWT() *Jwt {
 }
 
 func (j *Jwt) CreateClaims(baseClaims req.BaseClaims) req.CustomClaims {
-	bf, _ := ParseDuration(core.Config.Jwt.BufferTime)
-	ep, _ := ParseDuration(core.Config.Jwt.ExpiresTime)
+	bf, _ := util.ParseDuration(core.Config.Jwt.BufferTime)
+	ep, _ := util.ParseDuration(core.Config.Jwt.ExpiresTime)
 	claims := req.CustomClaims{
 		BaseClaims: baseClaims,
 		BufferTime: int64(bf / time.Second), // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
@@ -61,18 +55,19 @@ func (j *Jwt) ParseToken(tokenString string) (*req.CustomClaims, error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
-		//if ve, ok := err.(*jwt.ValidationError); ok {
-		//	if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-		//		return nil, TokenMalformed
-		//	} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-		//		// Token is expired
-		//		return nil, TokenExpired
-		//	} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-		//		return nil, TokenNotValidYet
-		//	} else {
-		//		return nil, TokenInvalid
-		//	}
-		//}
+		var ve *ValidationError
+		if errors.As(err, &ve) {
+			if ve.Errors&ValidationErrorMalformed != 0 {
+				return nil, TokenMalformed
+			} else if ve.Errors&ValidationErrorExpired != 0 {
+				// Token is expired
+				return nil, TokenExpired
+			} else if ve.Errors&ValidationErrorNotValidYet != 0 {
+				return nil, TokenNotValidYet
+			} else {
+				return nil, TokenInvalid
+			}
+		}
 	}
 	if token != nil {
 		if claims, ok := token.Claims.(*req.CustomClaims); ok && token.Valid {

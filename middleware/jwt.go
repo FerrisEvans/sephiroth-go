@@ -6,6 +6,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"go.uber.org/zap"
 	"sephiroth-go/core"
+	"sephiroth-go/core/auth"
+	"sephiroth-go/core/log"
 	"sephiroth-go/model/resp"
 	"sephiroth-go/model/sys"
 	"sephiroth-go/service"
@@ -19,7 +21,7 @@ var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
 func JwtAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
-		token := util.GetToken(c)
+		token := auth.GetToken(c)
 		if token == "" {
 			resp.NoAuth("未登录或非法访问", c)
 			c.Abort()
@@ -27,22 +29,22 @@ func JwtAuth() gin.HandlerFunc {
 		}
 		if jwtService.IsBlacklist(token) {
 			resp.NoAuth("您的帐户异地登陆或令牌失效", c)
-			util.ClearToken(c)
+			auth.ClearToken(c)
 			c.Abort()
 			return
 		}
-		j := util.NewJWT()
+		j := auth.NewJWT()
 		// parseToken 解析token包含的信息
 		claims, err := j.ParseToken(token)
 		if err != nil {
-			if errors.Is(err, util.TokenExpired) {
+			if errors.Is(err, auth.TokenExpired) {
 				resp.NoAuth("授权已过期", c)
-				util.ClearToken(c)
+				auth.ClearToken(c)
 				c.Abort()
 				return
 			}
 			resp.NoAuth(err.Error(), c)
-			util.ClearToken(c)
+			auth.ClearToken(c)
 			c.Abort()
 			return
 		}
@@ -63,11 +65,11 @@ func JwtAuth() gin.HandlerFunc {
 			newClaims, _ := j.ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt.Unix(), 10))
-			util.SetToken(c, newToken, int(dr.Seconds()))
+			auth.SetToken(c, newToken, int(dr.Seconds()))
 			if core.Config.System.UseMultipoint {
 				RedisJwtToken, err := jwtService.GetRedisJWT(newClaims.Username)
 				if err != nil {
-					core.Log.Error("get redis jwt failed", zap.Error(err))
+					log.Log.Error("get redis jwt failed", zap.Error(err))
 				} else { // 当之前的取成功时才进行拉黑操作
 					_ = jwtService.JsonInBlacklist(sys.JwtBlacklist{Jwt: RedisJwtToken})
 				}
