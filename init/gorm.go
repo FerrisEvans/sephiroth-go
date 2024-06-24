@@ -1,6 +1,7 @@
 package init
 
 import (
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
@@ -27,8 +28,20 @@ func Database() *gorm.DB {
 	}
 }
 
+func RegisterTables() {
+	db := core.Db
+	err := db.AutoMigrate(
+	// todo
+	)
+	if err != nil {
+		core.Log.Error("register table failed", zap.Error(err))
+		os.Exit(0)
+	}
+
+	core.Log.Info("register table success")
+}
+
 // Config gorm 自定义配置
-// Author [SliverHorn](https://github.com/SliverHorn)
 func (g *_gorm) Config(prefix string, singular bool) *gorm.Config {
 	var general datasource.GeneralDB
 	switch core.Config.System.DbType {

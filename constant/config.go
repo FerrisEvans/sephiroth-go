@@ -1,7 +1,7 @@
 package constant
 
 const (
-	ConfigEnv         = "GVA_CONFIG"
+	ConfigEnv         = "default"
 	ConfigDefaultFile = "config.yaml"
 	ConfigTestFile    = "config.test.yaml"
 	ConfigDebugFile   = "config.debug.yaml"

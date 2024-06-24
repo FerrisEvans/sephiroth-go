@@ -14,7 +14,7 @@ type Server struct {
 	System  System  `mapstructure:"system" json:"system" yaml:"system"`
 	Captcha Captcha `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 	// auto
-	//AutoCode Autocode `mapstructure:"autocode" json:"autocode" yaml:"autocode"`
+	AutoCode Autocode `mapstructure:"autocode" json:"autocode" yaml:"autocode"`
 	// gorm
 	Mysql  datasource.Mysql           `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	Pgsql  datasource.Pgsql           `mapstructure:"pgsql" json:"pgsql" yaml:"pgsql"`
