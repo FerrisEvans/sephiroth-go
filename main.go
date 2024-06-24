@@ -6,5 +6,8 @@ import (
 )
 
 func main() {
+	core.Vp = core.Viper()
+	core.OtherInit()
+	core.Log = core.Zap()
 	core.Db = init.Database()
 }
