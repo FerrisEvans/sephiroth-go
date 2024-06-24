@@ -1,11 +1,15 @@
 package router
 
 import (
-	"sephiroth-go/router/biz"
+	"sephiroth-go/router/auth"
+	"sephiroth-go/router/storage"
 	"sephiroth-go/router/sys"
 )
 
 type RouterGroup struct {
-	Sys sys.RouterGroup
-	Biz biz.RouterGroup
+	Auth    auth.RouterGroup
+	Storage storage.RouterGroup
+	Sys     sys.RouterGroup
 }
+
+var RouterGroupApp = new(RouterGroup)

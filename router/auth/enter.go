@@ -1,3 +1,3 @@
-package biz
+package auth
 
 type RouterGroup struct{}
