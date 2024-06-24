@@ -11,3 +11,9 @@ type BaseModel struct {
 	UpdatedAt time.Time      // 更新时间
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"` // 删除时间
 }
+
+type ClearDb struct {
+	TableName    string
+	CompareField string
+	Interval     string
+}

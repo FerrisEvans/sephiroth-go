@@ -17,4 +17,5 @@ func main() {
 	core.Log = core.Zap()
 	zap.ReplaceGlobals(core.Log)
 	core.Db = init.Database()
+	init.Timer()
 }
