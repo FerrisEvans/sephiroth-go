@@ -1,5 +1,10 @@
 package main
 
-func main() {
+import (
+	"sephiroth-go/core"
+	"sephiroth-go/init"
+)
 
+func main() {
+	core.Db = init.Database()
 }
